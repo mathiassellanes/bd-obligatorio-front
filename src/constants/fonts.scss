@@ -1,0 +1,39 @@
+@mixin poppins($font-size: 16px, $line-height: 24px) {
+  font-family: 'Poppins', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: $font-size;
+  line-height: $line-height;
+}
+
+@mixin poppins-semi-bold($font-size: 16px, $line-height: 24px) {
+  font-family: 'Poppins', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: $font-size;
+  line-height: $line-height;
+}
+
+@mixin poppins-bold($font-size: 16px, $line-height: 24px) {
+  font-family: 'Poppins', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: $font-size;
+  line-height: $line-height;
+}
+
+@mixin title {
+  @include poppins-semi-bold(36px, 54px);
+}
+
+@mixin subtitle {
+  @include poppins-semi-bold(24px, 36px);
+}
+
+@mixin text-medium {
+  @include poppins-semi-bold(16px, 24px);
+}
+
+@mixin text {
+  @include poppins(16px, 24px);
+}

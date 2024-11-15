@@ -1,0 +1,25 @@
+@import "../../constants/styles.scss";
+
+.button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 15px;
+  gap: 10px;
+  height: 45px;
+  background: $blue;
+  border-radius: 6px;
+  color: $white;
+  font-family: 'Poppins';
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  cursor: pointer;
+
+  .icon {
+    width: 24px;
+    height: 24px;
+    background: $white;
+  }
+}
