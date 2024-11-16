@@ -5,11 +5,13 @@ import './styles.scss';
 interface Column {
   header: string;
   accessor: string;
-  toMap?: (value: any) => React.ReactNode;
+  toMap?: (value: unknown) => React.ReactNode;
+  className?: string;
+  classForWidth?: string;
 }
 
 interface TableProps {
-  data: any[];
+  data: unknown[];
   columns: Column[];
 }
 
@@ -18,7 +20,7 @@ const Table: React.FC<TableProps> = ({ data, columns }) => {
     <div className="table">
       <div className="table-header">
         {columns.map((column) => (
-          <span key={column.accessor}>{column.header}</span>
+          <span className={`table-header-item ${column.classForWidth}`} key={column.accessor}>{column.header}</span>
         ))}
       </div>
       <div className="table-body">
@@ -26,8 +28,9 @@ const Table: React.FC<TableProps> = ({ data, columns }) => {
           <div className="table-row" key={rowIndex}>
             {columns.map((column) => {
               const value = row[column.accessor];
+
               return (
-                <span key={column.accessor}>
+                <span className={`${column.className} ${column.classForWidth}`} key={column.accessor}>
                   {column.toMap ? column.toMap(value) : value}
                 </span>
               );

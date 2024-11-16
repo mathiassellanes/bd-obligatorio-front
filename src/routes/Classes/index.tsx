@@ -1,11 +1,18 @@
 import { useEffect, useState } from 'react';
+import { format, parse } from 'date-fns';
+
 import Input from '../../components/Input/Input';
 
 import searchIcon from '../../assets/icons/search.svg';
-import './styles.scss'
+import editIcon from '../../assets/icons/edit.svg';
+import chevronIcon from '../../assets/icons/chevron.svg';
+
 import Select from '../../components/Select';
-import { getClasses } from '../../api/classes';
 import Table from '../../components/Table';
+
+import { getClasses } from '../../api/classes';
+
+import './styles.scss'
 
 const Home = () => {
   const columns = [
@@ -22,13 +29,43 @@ const Home = () => {
     {
       header: 'Turno',
       accessor: 'turno',
-      toMap: (value: any) => `${value.horaInicio} - ${value.horaFin}`,
+      toMap: (value: {
+        diaParaDictar: string;
+        horaInicio: string;
+        horaFin: string;
+      }) => {
+        const diaParaDictar = format(new Date(value.diaParaDictar), 'dd/MM/yyyy');
+        const horaInicio = format(parse(value.horaInicio, 'HH:mm:ss', new Date()), 'HH:mm');
+        const horaFin = format(parse(value.horaFin, 'HH:mm:ss', new Date()), 'HH:mm');
+
+        return (
+          <div className='classes__date'>
+            <span>{diaParaDictar}</span>
+            <span>{`${horaInicio} - ${horaFin}`}</span>
+          </div>
+        )
+      },
     },
     {
       header: 'Dictada',
       accessor: 'dictada',
       toMap: (value: any) => (value ? 'Sí' : 'No'),
     },
+    {
+      header: 'Cantidad Alumnos',
+      accessor: 'cantidadAlumnos',
+      toMap: (value: any) => (value),
+    },
+    {
+      header: '',
+      accessor: 'id',
+      className: 'table__actions',
+      classForWidth: 'table__actions--width',
+      toMap: (value: any) => <>
+        <img src={editIcon} />
+        <img src={chevronIcon} />
+      </>,
+    }
   ];
 
   const [classes, setClasses] = useState([]);

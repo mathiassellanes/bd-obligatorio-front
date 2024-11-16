@@ -4,7 +4,11 @@ import {
 
 import Login from "../routes/Login";
 import Sidebar from "../components/Layout/Sidebar";
-import Home from "../routes/Home";
+import Classes from "../routes/Classes";
+import Alumns from "../routes/Alumns";
+import Instructors from "../routes/Instructors";
+import Activities from "../routes/Activities";
+import Turns from "../routes/Turns";
 
 export const BrowserRouter = createBrowserRouter([
   {
@@ -16,9 +20,25 @@ export const BrowserRouter = createBrowserRouter([
     path: "/",
     children: [
       {
-        element: <Home />,
-        path: "*",
+        element: <Classes />,
+        path: "/",
       },
+      {
+        element: <Alumns />,
+        path: "/alumns",
+      },
+      {
+        element: <Instructors />,
+        path: "/instructors",
+      },
+      {
+        element: <Activities />,
+        path: "/activities",
+      },
+      {
+        element: <Turns />,
+        path: "/turns",
+      }
     ],
   }
 ]);

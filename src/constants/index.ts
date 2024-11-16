@@ -1,18 +1,22 @@
 export const sidebarOptions = [
   {
     label: 'Clases',
-    to: '/clases'
+    to: '/'
   },
   {
     label: 'Alumnos',
-    to: '/alumnos'
+    to: '/alumns'
   },
   {
     label: 'Instructores',
-    to: '/instructores'
+    to: '/instructors'
   },
   {
     label: 'Actividades',
-    to: '/actividades'
+    to: '/activities'
+  },
+  {
+    label: 'Turnos',
+    to: '/turns'
   }
 ]

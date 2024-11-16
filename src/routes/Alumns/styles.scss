@@ -8,6 +8,9 @@
   color: $black;
   padding: 72px 56px;
   @include subtitle;
+  gap: 30px;
+  display: flex;
+  flex-direction: column;
 
   &__filters {
     display: flex;

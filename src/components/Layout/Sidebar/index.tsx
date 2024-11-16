@@ -3,7 +3,6 @@ import { NavLink, Outlet } from "react-router-dom";
 import { sidebarOptions } from "../../../constants";
 import ucuImage from '../../../assets/ucu.svg';
 
-
 import './styles.scss';
 
 const Sidebar = () => {
@@ -30,7 +29,9 @@ const Sidebar = () => {
           }
         </div>
       </div>
-      <Outlet />
+      <div className="sidebar__content">
+        <Outlet />
+      </div >
     </div>
   );
 }
