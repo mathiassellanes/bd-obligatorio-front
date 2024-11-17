@@ -1,0 +1,93 @@
+@import "../../../constants/styles.scss";
+@import "../../../constants/fonts.scss";
+
+.add-class {
+  width: 700px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 40px;
+
+  &__header {
+    display: flex;
+    @include subtitle;
+    color: $blue;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__input {
+    border: 1px solid $blue;
+
+    &-label {
+      color: $blue;
+      @include text-medium;
+    }
+  }
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    &-row {
+      display: flex;
+      gap: 20px;
+    }
+
+  }
+
+  &__students {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    &-title {
+      @include text-medium;
+      color: $blue;
+    }
+
+    &-list {
+      display: flex;
+      gap: 20px;
+
+      &-item {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        padding: 10px;
+        color: $blue;
+        gap: 10px;
+        background-color: $cyanLowOpacity;
+        border-radius: 5px;
+
+        &-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+        }
+
+        &-equipement {
+          @include text-medium;
+        }
+      }
+    }
+
+    &-add {
+      flex-direction: row-reverse;
+
+
+      &>.icon {
+        background-color: transparent;
+      }
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 20px;
+  }
+}

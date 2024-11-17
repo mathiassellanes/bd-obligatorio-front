@@ -1,7 +1,14 @@
+@import "../../constants/styles.scss";
+@import "../../constants/fonts.scss";
+
 .input {
-  &--wrapper {
+  &-wrapper {
     display: flex;
     flex-direction: column;
+
+    &--modal {
+      gap: 10px;
+    }
   }
 
   &-label {
@@ -9,18 +16,26 @@
     font-weight: 400;
     font-size: 24px;
     line-height: 36px;
-    color: #FFFFFF;
+    color: $white;
+
+    &--modal {
+      color: $blue;
+      @include text-medium;
+    }
   }
 
   &-container {
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 0px 15px;
     gap: 10px;
     height: 54px;
-    background: #FEFCFB;
+    background: $white;
     border-radius: 6px;
+
+    &--chip {
+      height: 45px;
+    }
 
     .icon {
       width: 24px;
@@ -38,6 +53,21 @@
     font-weight: 400;
     font-size: 16px;
     line-height: 24px;
-    color: #001F54;
+    color: $blue;
+
+    &--modal {
+      border: 1px solid $blue;
+      border-radius: 5px;
+      height: 54px;
+      padding: 0 10px;
+    }
+  }
+}
+
+.add-class__input {
+  &-label {
+    font-size: 16px;
+    line-height: 24px;
+    color: $blue;
   }
 }

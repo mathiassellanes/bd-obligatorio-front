@@ -8,7 +8,7 @@ import chevronIcon from '../../assets/icons/chevron.svg';
 import Select from '../../components/Select';
 import Table from '../../components/Table';
 
-import { getStudents } from '../../api/students';
+import { getInstructors } from '../../api/instructors';
 
 import './styles.scss'
 
@@ -45,7 +45,7 @@ const Instructors = () => {
   });
 
   const handleGetData = async () => {
-    const dataResponse = await getStudents();
+    const dataResponse = await getInstructors();
 
     setInstructors(dataResponse);
   }

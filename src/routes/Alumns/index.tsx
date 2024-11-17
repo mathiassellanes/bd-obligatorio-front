@@ -29,7 +29,6 @@ const Alumns = () => {
       header: 'Fecha de Nacimiento',
       accessor: 'fechaNacimiento',
       toMap: (value: any) => format(new Date(value), 'dd/MM/yyyy')
-
     },
     {
       header: 'Teléfono',

@@ -17,17 +17,17 @@ const Activities = () => {
     {
       header: 'ID',
       accessor: 'id',
-      toMap: (value: any) => value,
+      toMap: (value: string) => value,
     },
     {
       header: 'Descripción',
       accessor: 'descripcion',
-      toMap: (value: any) => value,
+      toMap: (value: string) => value,
     },
     {
       header: 'Costo',
       accessor: 'costo',
-      toMap: (value: any) => `$${value}`,
+      toMap: (value: string) => `$${value}`,
     },
     {
       header: '',

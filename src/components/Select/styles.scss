@@ -1,0 +1,86 @@
+@import "../../constants/styles.scss";
+@import "../../constants/fonts.scss";
+
+.select {
+  &-wrapper {
+    display: flex;
+    flex-direction: column;
+
+    &--modal {
+      display: flex;
+      gap: 10px;
+    }
+  }
+
+  &-label {
+    font-family: 'Poppins';
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 36px;
+    color: $white;
+
+    &--modal {
+      color: $blue;
+      @include text-medium;
+    }
+  }
+
+  &-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    height: 54px;
+    background: $white;
+    border-radius: 6px;
+
+    &--chip {
+      height: 45px;
+    }
+
+    .icon {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &-field {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: $blue;
+
+    &--modal {
+      border: 1px solid $blue;
+      border-radius: 5px;
+      height: 54px;
+      padding: 10px;
+      max-width: 200px;
+
+      @include text;
+    }
+
+    &--chip {
+      max-width: 150px;
+      background-color: $blue;
+      color: $white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      height: 45px;
+    }
+  }
+}
+
+.add-class__input {
+  &-label {
+    font-size: 16px;
+    line-height: 24px;
+    color: $blue;
+  }
+}

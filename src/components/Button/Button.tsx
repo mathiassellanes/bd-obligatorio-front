@@ -3,13 +3,14 @@ import './styles.scss';
 
 interface ButtonProps {
   icon?: React.ReactNode;
-  label: string;
+  label: string | React.ReactNode;
   onClick: () => void;
+  className?: string;
 }
 
-const Button: React.FC<ButtonProps> = ({ icon, label, onClick }) => {
+const Button: React.FC<ButtonProps> = ({ icon, label, onClick, className = ''}) => {
   return (
-    <button className="button-container" onClick={onClick}>
+    <button className={`button-container ${className}`} onClick={onClick}>
       {icon && <div className="icon">{icon}</div>}
       {label}
     </button>

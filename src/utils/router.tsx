@@ -9,6 +9,7 @@ import Alumns from "../routes/Alumns";
 import Instructors from "../routes/Instructors";
 import Activities from "../routes/Activities";
 import Turns from "../routes/Turns";
+import ClassesDetails from "../routes/ClassesDetails";
 
 export const BrowserRouter = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ export const BrowserRouter = createBrowserRouter([
       {
         element: <Classes />,
         path: "/",
+      },
+      {
+        element: <ClassesDetails />,
+        path: "/:id",
       },
       {
         element: <Alumns />,

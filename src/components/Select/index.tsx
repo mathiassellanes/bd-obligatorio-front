@@ -8,6 +8,7 @@ interface SelectProps {
   onChange: (value: string) => void;
   label?: string;
   options: { value: string; label: string }[];
+  name?: string;
 }
 
 const Select: React.FC<SelectProps> = ({
@@ -17,14 +18,15 @@ const Select: React.FC<SelectProps> = ({
   onChange,
   label,
   options,
+  name = '',
 }) => {
   return (
-    <div className="input-wrapper">
-      {label && <label className="input-label">{label}</label>}
-      <div className="input-container">
+    <div className={`select-wrapper select-wrapper--${name}`}>
+      {label && <label className={`select-label select-label--${name}`}>{label}</label>}
+      <div className={`select-container select-container--${name}`}>
         {icon && iconPosition === 'left' && <img src={icon} className="icon" />}
         <select
-          className="input-field"
+          className={`select-field select-field--${name}`}
           value={value}
           onChange={(e) => onChange(e.target.value)}
         >

@@ -9,6 +9,7 @@ interface InputProps {
   onChange: (value: string) => void;
   label?: string;
   type?: string;
+  name?: string;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -19,20 +20,21 @@ const Input: React.FC<InputProps> = ({
   onChange,
   label,
   type = 'text',
+  name = ''
 }) => {
   return (
-    <div className="input-wrapper">
-      {label && <label className="input-label">{label}</label>}
-      <div className="input-container">
-        {icon && iconPosition === 'left' && <img src={icon} className="icon"/>}
+    <div className={`input-wrapper input-wrapper--${name}`}>
+      {label && <label className={`input-label input-label--${name}`}>{label}</label>}
+      <div className={`input-container input-container--${name}`}>
+        {icon && iconPosition === 'left' && <img src={icon} className="icon" />}
         <input
           type={type}
-          className="input-field"
+          className={`input-field input-field--${name}`}
           placeholder={placeholder}
           value={value}
           onChange={(e) => onChange(e.target.value)}
         />
-        {icon && iconPosition === 'right' &&  <img src={icon} className="icon"/>}
+        {icon && iconPosition === 'right' && <img src={icon} className="icon" />}
       </div>
     </div>
   );

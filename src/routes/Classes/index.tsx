@@ -4,7 +4,7 @@ import { format, parse } from 'date-fns';
 import Input from '../../components/Input/Input';
 
 import searchIcon from '../../assets/icons/search.svg';
-import editIcon from '../../assets/icons/edit.svg';
+import addIcon from '../../assets/icons/add.svg';
 import chevronIcon from '../../assets/icons/chevron.svg';
 
 import Select from '../../components/Select';
@@ -13,18 +13,30 @@ import Table from '../../components/Table';
 import { getClasses } from '../../api/classes';
 
 import './styles.scss'
+import Button from '../../components/Button/Button';
+import { useNavigate } from 'react-router-dom';
+import { useModal } from '../../utils/ModalContext';
+import AddClassModal from '../../components/Modal/AddClass';
 
 const Home = () => {
+  const navigate = useNavigate();
+  const { openModal } = useModal();
+
   const columns = [
     {
       header: 'Instructor',
       accessor: 'instructor',
-      toMap: (value: any) => `${value.nombre} ${value.apellido}`,
+      toMap: (value: {
+        nombre: string;
+        apellido: string;
+      }) => `${value.nombre} ${value.apellido}`,
     },
     {
       header: 'Actividad',
       accessor: 'actividad',
-      toMap: (value: any) => value.nombre,
+      toMap: (value: {
+        nombre: string;
+      }) => value.nombre,
     },
     {
       header: 'Turno',
@@ -49,22 +61,26 @@ const Home = () => {
     {
       header: 'Dictada',
       accessor: 'dictada',
-      toMap: (value: any) => (value ? 'Sí' : 'No'),
+      toMap: (value: boolean) => (value ? 'Sí' : 'No'),
     },
     {
       header: 'Cantidad Alumnos',
       accessor: 'cantidadAlumnos',
-      toMap: (value: any) => (value),
+      toMap: (value: string) => (value),
     },
     {
       header: '',
       accessor: 'id',
       className: 'table__actions',
       classForWidth: 'table__actions--width',
-      toMap: (value: any) => <>
-        <img src={editIcon} />
-        <img src={chevronIcon} />
-      </>,
+      toMap: (value: string) => (
+        <Button
+          className="classes__chevron-button"
+          onClick={() => navigate(`/${value}`)}
+          icon={<img className='classes__chevron' src={chevronIcon} />}
+          label=''
+        />
+      ),
     }
   ];
 
@@ -82,6 +98,10 @@ const Home = () => {
     setClasses(classesResponse);
   }
 
+  const handleOpenModal = () => {
+    openModal(<AddClassModal />);
+  }
+
   useEffect(() => {
     handleGetClasses();
   }, []);
@@ -89,44 +109,48 @@ const Home = () => {
   return (
     <div className="classes">
       <span className='classes__breadcrumb'>Clases</span>
-      <div className='classes__filters'>
-        <Input
-          placeholder='Buscar por instructor'
-          icon={searchIcon}
-          value={search}
-          onChange={setSearch}
-          iconPosition='right'
-        />
-        <Select
-          value={filters.activity}
-          onChange={(value) => setFilters({ ...filters, activity: value })}
-          options={[
-            { value: 'yoga', label: 'Yoga' },
-            { value: 'crossfit', label: 'Crossfit' },
-            { value: 'pilates', label: 'Pilates' },
-          ]}
-        />
-        <Select
-          value={filters.turn}
-          onChange={(value) => setFilters({ ...filters, turn: value })}
-          options={[
-            { value: 'morning', label: 'Mañana' },
-            { value: 'afternoon', label: 'Tarde' },
-            { value: 'night', label: 'Noche' },
-          ]}
-        />
-
-        <div className='classes__filters--checkbox'>
-          <input
-            type='checkbox'
-            id='dicted'
-            checked={filters.dicted}
-            onChange={() => setFilters({ ...filters, dicted: !filters.dicted })}
+      <div className='classes__actions'>
+        <div className='classes__actions-filters'>
+          <Input
+            placeholder='Buscar por instructor'
+            icon={searchIcon}
+            value={search}
+            onChange={setSearch}
+            iconPosition='right'
           />
-          <label htmlFor='dicted'>Dictadas</label>
+          <Select
+            value={filters.activity}
+            onChange={(value) => setFilters({ ...filters, activity: value })}
+            options={[
+              { value: 'yoga', label: 'Yoga' },
+              { value: 'crossfit', label: 'Crossfit' },
+              { value: 'pilates', label: 'Pilates' },
+            ]}
+          />
+          <Select
+            value={filters.turn}
+            onChange={(value) => setFilters({ ...filters, turn: value })}
+            options={[
+              { value: 'morning', label: 'Mañana' },
+              { value: 'afternoon', label: 'Tarde' },
+              { value: 'night', label: 'Noche' },
+            ]}
+          />
+          <Select
+            value={filters.turn}
+            onChange={(value) => setFilters({ ...filters, turn: value })}
+            options={[
+              { value: false, label: 'No dictadas' },
+              { value: true, label: 'Dictadas' },
+            ]}
+          />
         </div>
-
-
+        <Button
+          className="classes__details-button"
+          onClick={handleOpenModal}
+          icon={<img className='classes__edit' src={addIcon} />}
+          label='Agregar'
+        />
       </div>
       <Table
         columns={columns}
