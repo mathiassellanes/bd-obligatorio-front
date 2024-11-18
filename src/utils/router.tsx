@@ -5,11 +5,16 @@ import {
 import Login from "../routes/Login";
 import Sidebar from "../components/Layout/Sidebar";
 import Classes from "../routes/Classes";
-import Alumns from "../routes/Alumns";
+import Alumns from "../routes/Students";
 import Instructors from "../routes/Instructors";
 import Activities from "../routes/Activities";
 import Turns from "../routes/Turns";
 import ClassesDetails from "../routes/ClassesDetails";
+import StudentDetails from "../routes/StudentDetails";
+import InstructorDetails from "../routes/InstructorDetails";
+import ActivitiesDetails from "../routes/ActivitiesDetails";
+import TurnsDetails from "../routes/TurnsDetails";
+import Overview from "../routes/Overview";
 
 export const BrowserRouter = createBrowserRouter([
   {
@@ -21,20 +26,36 @@ export const BrowserRouter = createBrowserRouter([
     path: "/",
     children: [
       {
+        element: <Overview/>,
+        path: '/',
+      },
+      {
         element: <Classes />,
-        path: "/",
+        path: "/classes",
       },
       {
         element: <ClassesDetails />,
-        path: "/:id",
+        path: "/classes/:id",
       },
       {
         element: <Alumns />,
-        path: "/alumns",
+        path: "/students",
+      },
+      {
+        element: <StudentDetails />,
+        path: "/students/:ci",
       },
       {
         element: <Instructors />,
         path: "/instructors",
+      },
+      {
+        element: <InstructorDetails />,
+        path: "/instructors/:ci",
+      },
+      {
+        element: <ActivitiesDetails />,
+        path: "/activities/:id",
       },
       {
         element: <Activities />,
@@ -43,6 +64,10 @@ export const BrowserRouter = createBrowserRouter([
       {
         element: <Turns />,
         path: "/turns",
+      },
+      {
+        element: <TurnsDetails />,
+        path: "/turns/:id",
       }
     ],
   }

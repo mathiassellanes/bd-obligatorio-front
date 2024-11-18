@@ -27,7 +27,11 @@ const Table: React.FC<TableProps> = ({ data, columns }) => {
         {data.map((row, rowIndex) => (
           <div className="table-row" key={rowIndex}>
             {columns.map((column) => {
-              const value = row[column.accessor];
+              let value = row;
+
+              if (column.accessor) {
+                value = row[column.accessor];
+              }
 
               return (
                 <span className={`${column.className} ${column.classForWidth}`} key={column.accessor}>

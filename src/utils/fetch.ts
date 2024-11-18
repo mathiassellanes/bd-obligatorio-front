@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { getActivities } from "../api/activities";
-import { getInstructors } from "../api/instructors";
-import { getTurns } from "../api/turns";
-import { getStudents } from "../api/students";
-import { getEquipements } from "../api/equipements";
+import { getActivities, getActivityById } from "../api/activities";
+import { getInstructorByCi, getInstructors } from "../api/instructors";
+import { getTurns, getTurnsById } from "../api/turns";
+import { getStudentById, getStudents } from "../api/students";
+import { getEquipements, getEquipementsByActiviyId } from "../api/equipements";
+import { getOverview } from "../api/overview";
 
 export const useActivities = () => {
   const [activities, setActivities] = useState([]);
@@ -111,6 +112,162 @@ export const useEquipements = () => {
 
   return {
     equipements,
+    isLoading,
+  };
+}
+
+export const useEquipementsByActivityId = ({ id }: { id: number }) => {
+  const [equipements, setEquipements] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleGetEquipementsByActivityId = async (activityId: number) => {
+    setIsLoading(true);
+    const equipementsResponse = await getEquipementsByActiviyId({ id: activityId });
+
+    setIsLoading(false);
+    setEquipements(equipementsResponse);
+  }
+
+  useEffect(() => {
+    handleGetEquipementsByActivityId(id);
+  }, []);
+
+  return {
+    equipements,
+    refetch: (id: number) => handleGetEquipementsByActivityId(id),
+    isLoading,
+  };
+}
+
+export const useStudentByCi = ({ ci }: { ci: string }) => {
+  const [student, setStudent] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleGetStudentById = async (studentCi: string) => {
+    setIsLoading(true);
+    const studentResponse = await getStudentById({ ci: studentCi });
+
+    setIsLoading(false);
+    setStudent(studentResponse || {
+      ci: '',
+      nombreCompleto: '',
+      telefono: '',
+      correo: '',
+    });
+  }
+
+  useEffect(() => {
+    handleGetStudentById(ci);
+  }, []);
+
+  return {
+    student,
+    isLoading,
+  };
+}
+
+export const useInstructorByCi = ({ ci }: { ci: string }) => {
+  const [instructor, setInstructor] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleGetInstructorByCi = async (instructorCi: string) => {
+    setIsLoading(true);
+    const instructorResponse = await getInstructorByCi({ ci: instructorCi });
+
+    setIsLoading(false);
+    setInstructor(instructorResponse || {
+      ci: '',
+      nombreCompleto: '',
+      telefono: '',
+      correo: '',
+    });
+  }
+
+  useEffect(() => {
+    handleGetInstructorByCi(ci);
+  }, []);
+
+  return {
+    instructor,
+    isLoading,
+  };
+}
+
+export const useActivityById = ({ id }: { id: number }) => {
+  const [activity, setActivity] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleGetActivityById = async (activityId: number) => {
+    setIsLoading(true);
+    const activityResponse = await getActivityById({ id: activityId });
+
+    setIsLoading(false);
+    setActivity(activityResponse || {
+      id: 0,
+      descripcion: '',
+      costo: 0,
+    });
+  }
+
+  useEffect(() => {
+    handleGetActivityById(id);
+  }, []);
+
+  return {
+    activity,
+    isLoading,
+  };
+}
+
+export const useTurnById = ({ id }: { id: number }) => {
+  const [turn, setTurn] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleGetTurnById = async (turnId: number) => {
+    setIsLoading(true);
+    const turnResponse = await getTurnsById({ id: turnId });
+
+    setIsLoading(false);
+    setTurn(turnResponse || {
+      id: 0,
+      horaInicio: '',
+      horaFin: '',
+    });
+  }
+
+  useEffect(() => {
+    handleGetTurnById(id);
+  }, []);
+
+  return {
+    turn,
+    isLoading,
+  };
+}
+
+export const useOverview = () => {
+  const [overview, setOverview] = useState({
+    turns: [],
+    activities: [],
+    students: []
+  });
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleGetOverview = async () => {
+    setIsLoading(true);
+    const overviewResponse = await getOverview();
+
+    setIsLoading(false);
+    setOverview(overviewResponse);
+  }
+
+  useEffect(() => {
+    handleGetOverview();
+  }, []);
+
+  return {
+    overview,
     isLoading,
   };
 }

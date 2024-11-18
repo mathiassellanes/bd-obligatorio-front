@@ -1,79 +1,57 @@
 import { useEffect, useState } from 'react';
-import { format, parse } from 'date-fns';
-
-import Input from '../../components/Input/Input';
+import { useNavigate } from 'react-router-dom';
+import { format } from 'date-fns';
 
 import searchIcon from '../../assets/icons/search.svg';
-import addIcon from '../../assets/icons/add.svg';
 import chevronIcon from '../../assets/icons/chevron.svg';
+import addIcon from '../../assets/icons/add.svg';
 
+import Input from '../../components/Input/Input';
 import Select from '../../components/Select';
 import Table from '../../components/Table';
+import Button from '../../components/Button/Button';
 
-import { getClasses } from '../../api/classes';
+import { getStudents } from '../../api/students';
 
 import './styles.scss'
-import Button from '../../components/Button/Button';
-import { useNavigate } from 'react-router-dom';
+import AddStudentModal from '../../components/Modal/AddStudent';
 import { useModal } from '../../utils/ModalContext';
-import AddClassModal from '../../components/Modal/AddClass';
 
-const Home = () => {
+const Alumns = () => {
   const navigate = useNavigate();
-  const { openModal } = useModal();
 
   const columns = [
     {
-      header: 'Instructor',
-      accessor: 'instructor',
-      toMap: (value: {
-        nombre: string;
-        apellido: string;
-      }) => `${value.nombre} ${value.apellido}`,
+      header: 'CI',
+      accessor: 'ci',
+      toMap: (value: any) => value,
     },
     {
-      header: 'Actividad',
-      accessor: 'actividad',
-      toMap: (value: {
-        nombre: string;
-      }) => value.nombre,
+      header: 'Nombre completo',
+      accessor: 'nombreCompleto',
+      toMap: (value: any) => value,
     },
     {
-      header: 'Turno',
-      accessor: 'turno',
-      toMap: (value: {
-        diaParaDictar: string;
-        horaInicio: string;
-        horaFin: string;
-      }) => {
-        const diaParaDictar = format(new Date(value.diaParaDictar), 'dd/MM/yyyy');
-        const horaInicio = format(parse(value.horaInicio, 'HH:mm:ss', new Date()), 'HH:mm');
-        const horaFin = format(parse(value.horaFin, 'HH:mm:ss', new Date()), 'HH:mm');
-
-        return (
-          <div className='classes__date'>
-            <span>{diaParaDictar}</span>
-            <span>{`${horaInicio} - ${horaFin}`}</span>
-          </div>
-        )
-      },
+      header: 'Fecha de Nacimiento',
+      accessor: 'fechaNacimiento',
+      toMap: (value: any) => format(new Date(value), 'dd/MM/yyyy')
     },
     {
-      header: 'Dictada',
-      accessor: 'dictada',
-      toMap: (value: boolean) => (value ? 'Sí' : 'No'),
+      header: 'Teléfono',
+      accessor: 'telefono',
+      toMap: (value: any) => value,
     },
     {
-      header: 'Cantidad Alumnos',
-      accessor: 'cantidadAlumnos',
-      toMap: (value: string) => (value),
+      header: 'Correo electrónico',
+      accessor: 'correo',
+      toMap: (value: any) => (value),
     },
     {
       header: '',
-      accessor: 'id',
+      accessor: 'ci',
       className: 'table__actions',
       classForWidth: 'table__actions--width',
-      toMap: (value: string) => (
+      toMap: (value: any) => (
         <Button
           className="classes__chevron-button"
           onClick={() => navigate(`${value}`)}
@@ -84,7 +62,8 @@ const Home = () => {
     }
   ];
 
-  const [classes, setClasses] = useState([]);
+  const { openModal } = useModal();
+  const [students, setStudents] = useState([]);
   const [search, setSearch] = useState('');
   const [filters, setFilters] = useState({
     activity: '',
@@ -93,26 +72,27 @@ const Home = () => {
   });
 
   const handleGetClasses = async () => {
-    const classesResponse = await getClasses();
+    const classesResponse = await getStudents();
 
-    setClasses(classesResponse);
-  }
-
-  const handleOpenModal = () => {
-    openModal(<AddClassModal />);
+    setStudents(classesResponse);
   }
 
   useEffect(() => {
     handleGetClasses();
   }, []);
 
+  const handleOpenModal = () => {
+    openModal(<AddStudentModal />);
+  }
+
   return (
     <div className="classes">
-      <span className='classes__breadcrumb'>Clases</span>
+      <span className='classes__breadcrumb'>Estudiantes</span>
       <div className='classes__actions'>
         <div className='classes__actions-filters'>
+
           <Input
-            placeholder='Buscar por instructor'
+            placeholder='Buscar por estudiante'
             icon={searchIcon}
             value={search}
             onChange={setSearch}
@@ -136,15 +116,19 @@ const Home = () => {
               { value: 'night', label: 'Noche' },
             ]}
           />
-          <Select
-            value={filters.turn}
-            onChange={(value) => setFilters({ ...filters, turn: value })}
-            options={[
-              { value: false, label: 'No dictadas' },
-              { value: true, label: 'Dictadas' },
-            ]}
-          />
+
+          <div className='classes__filters--checkbox'>
+            <input
+              type='checkbox'
+              id='dicted'
+              checked={filters.dicted}
+              onChange={() => setFilters({ ...filters, dicted: !filters.dicted })}
+            />
+            <label htmlFor='dicted'>Dictadas</label>
+          </div>
         </div>
+
+
         <Button
           className="classes__details-button"
           onClick={handleOpenModal}
@@ -154,10 +138,10 @@ const Home = () => {
       </div>
       <Table
         columns={columns}
-        data={classes}
+        data={students}
       />
     </div>
   );
 }
 
-export default Home;
+export default Alumns;

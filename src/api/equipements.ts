@@ -5,3 +5,10 @@ export const getEquipements = async () => {
 
   return response.data;
 };
+
+
+export const getEquipementsByActiviyId = async ({ id }: { id: number }) => {
+  const response = await api.get(`/equipement/activity/${id}`);
+
+  return response.data;
+};

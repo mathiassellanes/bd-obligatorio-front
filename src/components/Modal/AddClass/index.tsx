@@ -8,7 +8,7 @@ import addIcon from '../../../assets/icons/add.svg';
 import './styles.scss';
 import { useEffect, useState } from "react";
 import Select from "../../Select";
-import { useActivities, useEquipements, useInstructors, useStudents, useTurns } from "../../../utils/fetch";
+import { useActivities, useEquipements, useEquipementsByActivityId, useInstructors, useStudents, useTurns } from "../../../utils/fetch";
 import { createClass, updateClass } from "../../../api/classes";
 import StudentChip from "../../StudentChip";
 import { format, parseISO } from "date-fns";
@@ -29,12 +29,6 @@ const AddClassModal = ({ data }: {
 }) => {
   const { closeModal } = useModal();
 
-  const { activities, isLoading } = useActivities();
-  const { turns, isLoading: isLoadingTurns } = useTurns();
-  const { instructors, isLoading: isLoadingInstructors } = useInstructors();
-  const { students, isLoading: isLoadingStudents } = useStudents();
-  const { equipements, isLoading: isLoadingEquipements } = useEquipements();
-
   const [form, setForm] = useState({
     instructorCi: '',
     date: '',
@@ -43,8 +37,14 @@ const AddClassModal = ({ data }: {
     students: [],
   });
 
+  const { activities, isLoading } = useActivities();
+  const { turns, isLoading: isLoadingTurns } = useTurns();
+  const { instructors, isLoading: isLoadingInstructors } = useInstructors();
+  const { students, isLoading: isLoadingStudents } = useStudents();
+  const { equipements, isLoading: isLoadingEquipements, refetch } = useEquipementsByActivityId({ id: form.activityId });
+
   useEffect(() => {
-    if (!isLoading && !isLoadingInstructors && !isLoadingTurns && !isLoadingStudents && !isLoadingEquipements) {
+    if (!isLoading && !isLoadingInstructors && !isLoadingTurns && !isLoadingStudents) {
       if (data) {
         setForm({
           instructorCi: data.instructorCi,
@@ -63,7 +63,7 @@ const AddClassModal = ({ data }: {
         });
       }
     }
-  }, [isLoading, isLoadingInstructors, isLoadingTurns, isLoadingStudents, isLoadingEquipements, data]);
+  }, [isLoading, isLoadingInstructors, isLoadingTurns, isLoadingStudents, data]);
 
   const handleClass = async () => {
     const classData = {
@@ -85,6 +85,16 @@ const AddClassModal = ({ data }: {
 
     closeModal();
   };
+
+  useEffect(() => {
+    if (form.activityId) {
+      refetch(form.activityId);
+    }
+  }, [form.activityId]);
+
+  useEffect(() => {
+    console.log('remount');
+  }, []);
 
   return (
     <div className="add-class">

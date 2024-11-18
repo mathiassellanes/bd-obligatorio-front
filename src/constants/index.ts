@@ -1,11 +1,15 @@
 export const sidebarOptions = [
   {
-    label: 'Clases',
+    label: 'Vista general',
     to: '/'
   },
   {
+    label: 'Clases',
+    to: '/classes'
+  },
+  {
     label: 'Alumnos',
-    to: '/alumns'
+    to: '/students'
   },
   {
     label: 'Instructores',

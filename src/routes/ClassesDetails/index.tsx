@@ -9,17 +9,20 @@ import { getClass } from '../../api/classes';
 import editIcon from '../../assets/icons/edit.svg';
 
 import './styles.scss'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Button from '../../components/Button/Button';
 import { useModal } from '../../utils/ModalContext';
 import AddClassModal from '../../components/Modal/AddClass';
 
 const ClassesDetails = () => {
+  const navigate = useNavigate();
+  const handleNavigateToStudent = (ci) => navigate(`/students/${ci}`);
+
   const columns = [
     {
       header: 'Nombre completo',
-      accessor: 'nombreCompleto',
-      toMap: (value: string) => value,
+      accessor: '',
+      toMap: (value: string) => <span onClick={() => {handleNavigateToStudent(value.ci)}}>{value.nombreCompleto}</span>,
     },
     {
       header: 'Correo electrónico',
