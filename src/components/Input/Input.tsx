@@ -10,6 +10,8 @@ interface InputProps {
   label?: string;
   type?: string;
   name?: string;
+  disabled?: boolean;
+  [key: string]: string | boolean | ((value: string) => void) | undefined;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -20,7 +22,9 @@ const Input: React.FC<InputProps> = ({
   onChange,
   label,
   type = 'text',
-  name = ''
+  name = '',
+  disabled = false,
+  ...rest
 }) => {
   return (
     <div className={`input-wrapper input-wrapper--${name}`}>
@@ -32,7 +36,9 @@ const Input: React.FC<InputProps> = ({
           className={`input-field input-field--${name}`}
           placeholder={placeholder}
           value={value}
+          disabled={disabled}
           onChange={(e) => onChange(e.target.value)}
+          {...rest}
         />
         {icon && iconPosition === 'right' && <img src={icon} className="icon" />}
       </div>

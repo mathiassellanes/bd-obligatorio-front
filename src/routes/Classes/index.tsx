@@ -85,12 +85,6 @@ const Home = () => {
   ];
 
   const [classes, setClasses] = useState([]);
-  const [search, setSearch] = useState('');
-  const [filters, setFilters] = useState({
-    activity: '',
-    turn: '',
-    dicted: false,
-  });
 
   const handleGetClasses = async () => {
     const classesResponse = await getClasses();
@@ -99,7 +93,7 @@ const Home = () => {
   }
 
   const handleOpenModal = () => {
-    openModal(<AddClassModal />);
+    openModal(<AddClassModal setClass={setClasses} />);
   }
 
   useEffect(() => {
@@ -108,43 +102,8 @@ const Home = () => {
 
   return (
     <div className="classes">
-      <span className='classes__breadcrumb'>Clases</span>
       <div className='classes__actions'>
-        <div className='classes__actions-filters'>
-          <Input
-            placeholder='Buscar por instructor'
-            icon={searchIcon}
-            value={search}
-            onChange={setSearch}
-            iconPosition='right'
-          />
-          <Select
-            value={filters.activity}
-            onChange={(value) => setFilters({ ...filters, activity: value })}
-            options={[
-              { value: 'yoga', label: 'Yoga' },
-              { value: 'crossfit', label: 'Crossfit' },
-              { value: 'pilates', label: 'Pilates' },
-            ]}
-          />
-          <Select
-            value={filters.turn}
-            onChange={(value) => setFilters({ ...filters, turn: value })}
-            options={[
-              { value: 'morning', label: 'Mañana' },
-              { value: 'afternoon', label: 'Tarde' },
-              { value: 'night', label: 'Noche' },
-            ]}
-          />
-          <Select
-            value={filters.turn}
-            onChange={(value) => setFilters({ ...filters, turn: value })}
-            options={[
-              { value: false, label: 'No dictadas' },
-              { value: true, label: 'Dictadas' },
-            ]}
-          />
-        </div>
+        <span className='classes__breadcrumb'>Clases</span>
         <Button
           className="classes__details-button"
           onClick={handleOpenModal}

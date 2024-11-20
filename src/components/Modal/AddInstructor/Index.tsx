@@ -1,20 +1,18 @@
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+
 import { useModal } from "../../../utils/ModalContext";
 import Button from "../../Button/Button";
 import Input from "../../Input/Input";
 
 import closeIcon from '../../../assets/icons/close.svg';
+import { createInstructor, updateInstructor } from "../../../api/instructors.ts";
+import { instructor, instructors } from "../../../constants/types/instructors.ts";
 
 import './styles.scss';
-import { useEffect, useState } from "react";
-import { createInstructor, updateInstructor } from "../../../api/instructors.ts";
 
-const AddInstructorModal = ({ data }: {
-  data?: {
-    ci: string,
-    nombreCompleto: string,
-    nombre: string,
-    apellido: string,
-  }
+const AddInstructorModal = ({ data, setInstructors }: {
+  data?: instructor,
+  setInstructors: Dispatch<SetStateAction<instructor[] | instructor>>;
 }) => {
   const { closeModal } = useModal();
 
@@ -45,8 +43,22 @@ const AddInstructorModal = ({ data }: {
 
     if (data) {
       await updateInstructor(instructorData);
+
+      setInstructors((prevState) => ({
+        ...prevState,
+        ...instructorData,
+        nombreCompleto: `${instructorData.nombre} ${instructorData.apellido}`
+      }));
     } else {
-      await createInstructor(instructorData);
+      const instructorCreated = await createInstructor(instructorData);
+
+      setInstructors((prevState) => {
+        if (Array.isArray(prevState)) {
+          return [...prevState, instructorCreated];
+        } else {
+          return [prevState, instructorCreated];
+        }
+      });
     }
 
     closeModal();
@@ -64,6 +76,7 @@ const AddInstructorModal = ({ data }: {
           label="CI "
           name="modal"
           value={form.ci}
+          disabled={!!data}
         />
         <Input
           onChange={(value) => setForm({ ...form, nombre: value })}

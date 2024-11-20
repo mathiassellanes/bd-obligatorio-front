@@ -12,6 +12,7 @@ import './styles.scss';
 import { useInstructorByCi, useStudentByCi } from '../../utils/fetch';
 
 import { formatDate, formatHours } from '../../utils/helpers';
+import AddInstructorModal from '../../components/Modal/AddInstructor/Index';
 
 const InstructorDetails = () => {
   const navigate = useNavigate();
@@ -73,28 +74,27 @@ const InstructorDetails = () => {
   const { ci = '' } = useParams();
   const { openModal } = useModal();
 
-  const { instructor: studentResponse, isLoading } = useInstructorByCi({ ci });
+  const { instructor, isLoading, setInstructor } = useInstructorByCi({ ci });
 
   const handleOpenModal = () => {
+    const instructorData = {
+      ci: instructor.ci,
+      nombre: instructor.nombre,
+      apellido: instructor.apellido,
+    };
+
     openModal(
-      <AddStudentModal
-        data={{
-          ci: studentResponse.ci,
-          nombreCompleto: studentResponse.nombreCompleto,
-          nombre: studentResponse.nombre,
-          apellido: studentResponse.apellido,
-        }}
-      />
+      <AddInstructorModal data={instructorData} setInstructors={setInstructor} />
     );
   };
 
   return (
-    isLoading || !studentResponse ? <div>Cargando...</div> : (
+    isLoading || !instructor ? <div>Cargando...</div> : (
       <div className="student">
         <div className="student__details-container">
           <div className="student__details">
-            <span className="student__breadcrumb">{studentResponse.nombreCompleto}</span>
-            <span className="student__info">CI: {studentResponse.ci}</span>
+            <span className="student__breadcrumb">{instructor.nombreCompleto}</span>
+            <span className="student__info">CI: {instructor.ci}</span>
           </div>
           <Button
             className="student__details-button"
@@ -106,7 +106,7 @@ const InstructorDetails = () => {
         <div className="student__title">Clases a cargo:</div>
         <Table
           columns={columns}
-          data={studentResponse.clases}
+          data={instructor.clases}
         />
       </div>
     )

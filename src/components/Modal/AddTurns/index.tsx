@@ -20,7 +20,7 @@ const AddTurns = (data: {
   const { closeModal } = useModal();
 
   const [form, setForm] = useState({
-    id  : '',
+    id: '',
     horaInicio: '',
     horaFin: '',
   });
@@ -34,8 +34,6 @@ const AddTurns = (data: {
       });
     }
   }, [data]);
-
-  console.log('form', form);
 
   const handleTurn = async () => {
     if (data) {

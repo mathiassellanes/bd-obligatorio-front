@@ -15,7 +15,7 @@ interface TableProps {
   columns: Column[];
 }
 
-const Table: React.FC<TableProps> = ({ data, columns }) => {
+const Table: React.FC<TableProps> = ({ data = [], columns }) => {
   return (
     <div className="table">
       <div className="table-header">
@@ -23,8 +23,8 @@ const Table: React.FC<TableProps> = ({ data, columns }) => {
           <span className={`table-header-item ${column.classForWidth}`} key={column.accessor}>{column.header}</span>
         ))}
       </div>
-      <div className="table-body">
-        {data.map((row, rowIndex) => (
+      <div className={`table-body ${!data?.length ? 'table-body--without-data' : ''}`}>
+        { data?.length ? data.map((row, rowIndex) => (
           <div className="table-row" key={rowIndex}>
             {columns.map((column) => {
               let value = row;
@@ -40,7 +40,9 @@ const Table: React.FC<TableProps> = ({ data, columns }) => {
               );
             })}
           </div>
-        ))}
+        )) : (
+          <span className="table-no-data">No hay datos</span>
+        )}
       </div>
     </div>
   );

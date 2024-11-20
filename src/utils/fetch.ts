@@ -5,6 +5,7 @@ import { getTurns, getTurnsById } from "../api/turns";
 import { getStudentById, getStudents } from "../api/students";
 import { getEquipements, getEquipementsByActiviyId } from "../api/equipements";
 import { getOverview } from "../api/overview";
+import { instructor, instructors } from "../constants/types/instructors";
 
 export const useActivities = () => {
   const [activities, setActivities] = useState([]);
@@ -167,7 +168,13 @@ export const useStudentByCi = ({ ci }: { ci: string }) => {
 }
 
 export const useInstructorByCi = ({ ci }: { ci: string }) => {
-  const [instructor, setInstructor] = useState(null);
+  const [instructor, setInstructor] = useState<instructor>({
+    ci: '',
+    nombreCompleto: '',
+    nombre: '',
+    apellido: '',
+    clases: [],
+  });
   const [isLoading, setIsLoading] = useState(false);
 
   const handleGetInstructorByCi = async (instructorCi: string) => {
@@ -178,8 +185,9 @@ export const useInstructorByCi = ({ ci }: { ci: string }) => {
     setInstructor(instructorResponse || {
       ci: '',
       nombreCompleto: '',
-      telefono: '',
-      correo: '',
+      nombre: '',
+      apellido: '',
+      clases: [],
     });
   }
 
@@ -190,6 +198,7 @@ export const useInstructorByCi = ({ ci }: { ci: string }) => {
   return {
     instructor,
     isLoading,
+    setInstructor,
   };
 }
 

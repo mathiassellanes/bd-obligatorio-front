@@ -76,27 +76,8 @@ const Turns = () => {
 
   return (
     <div className="turns">
-      <span className="turns__breadcrumb">Turnos</span>
       <div className='turns__actions'>
-        <div className='turns__actions-filters'>
-          <Input
-            placeholder="Buscar por turno"
-            icon={searchIcon}
-            value={search}
-            onChange={setSearch}
-            iconPosition="right"
-          />
-          <Select
-            value={filters.turn}
-            onChange={(value) => setFilters({ ...filters, turn: value })}
-            options={[
-              { value: 'morning', label: 'Mañana' },
-              { value: 'afternoon', label: 'Tarde' },
-              { value: 'night', label: 'Noche' },
-            ]}
-          />
-
-        </div>
+        <span className="turns__breadcrumb">Turnos</span>
         <Button
           className="classes__details-button"
           onClick={handleOpenModal}

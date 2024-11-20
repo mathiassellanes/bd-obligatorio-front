@@ -17,6 +17,8 @@ import Button from '../../components/Button/Button';
 import AddClassModal from '../../components/Modal/AddClass';
 import { useModal } from '../../utils/ModalContext';
 import { useNavigate } from 'react-router-dom';
+import AddInstructorModal from '../../components/Modal/AddInstructor/Index';
+import { instructors } from '../../constants/types/instructors';
 
 const Instructors = () => {
   const navigate = useNavigate();
@@ -25,19 +27,19 @@ const Instructors = () => {
     {
       header: 'CI',
       accessor: 'ci',
-      toMap: (value: any) => value,
+      toMap: (value: string) => value,
     },
     {
       header: 'Nombre completo',
       accessor: 'nombreCompleto',
-      toMap: (value: any) => value,
+      toMap: (value: string) => value,
     },
     {
       header: '',
       accessor: 'ci',
       className: 'table__actions',
       classForWidth: 'table__actions--width',
-      toMap: (value) => <Button
+      toMap: (value: string) => <Button
         className="classes__chevron-button"
         onClick={() => navigate(`${value}`)}
         icon={<img className='classes__chevron' src={chevronIcon} />}
@@ -48,17 +50,13 @@ const Instructors = () => {
 
   const { openModal } = useModal();
 
-  const handleOpenModal = () => {
-    openModal(<AddClassModal />);
-  }
+  const [instructors, setInstructors] = useState<instructors>([]);
 
-  const [instructors, setInstructors] = useState([]);
-  const [search, setSearch] = useState('');
-  const [filters, setFilters] = useState({
-    activity: '',
-    turn: '',
-    dicted: false,
-  });
+  const handleOpenModal = () => {
+    openModal(
+      <AddInstructorModal setInstructors={setInstructors} />
+    );
+  };
 
   const handleGetData = async () => {
     const dataResponse = await getInstructors();
@@ -72,45 +70,8 @@ const Instructors = () => {
 
   return (
     <div className="instructors">
-      <span className='instructors__breadcrumb'>Instructores</span>
       <div className='instructors__actions'>
-        <div className='instructors__actions-filters'>
-          <Input
-            placeholder='Buscar por estudiante'
-            icon={searchIcon}
-            value={search}
-            onChange={setSearch}
-            iconPosition='right'
-          />
-          <Select
-            value={filters.activity}
-            onChange={(value) => setFilters({ ...filters, activity: value })}
-            options={[
-              { value: 'yoga', label: 'Yoga' },
-              { value: 'crossfit', label: 'Crossfit' },
-              { value: 'pilates', label: 'Pilates' },
-            ]}
-          />
-          <Select
-            value={filters.turn}
-            onChange={(value) => setFilters({ ...filters, turn: value })}
-            options={[
-              { value: 'morning', label: 'Mañana' },
-              { value: 'afternoon', label: 'Tarde' },
-              { value: 'night', label: 'Noche' },
-            ]}
-          />
-
-          <div className='instructors__filters--checkbox'>
-            <input
-              type='checkbox'
-              id='dicted'
-              checked={filters.dicted}
-              onChange={() => setFilters({ ...filters, dicted: !filters.dicted })}
-            />
-            <label htmlFor='dicted'>Dictadas</label>
-          </div>
-        </div>
+        <span className='instructors__breadcrumb'>Instructores</span>
         <Button
           className="classes__details-button"
           onClick={handleOpenModal}

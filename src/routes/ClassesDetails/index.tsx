@@ -1,12 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
-import { formatHours, formatDate } from '../../utils/helpers';
+import { formatHours, formatDate, isTurnActive } from '../../utils/helpers';
 
 import Table from '../../components/Table';
 
 import { getClass } from '../../api/classes';
 
 import editIcon from '../../assets/icons/edit.svg';
+
+import * as dfns from 'date-fns';
 
 import './styles.scss'
 import { useNavigate, useParams } from 'react-router-dom';
@@ -22,7 +24,7 @@ const ClassesDetails = () => {
     {
       header: 'Nombre completo',
       accessor: '',
-      toMap: (value: string) => <span onClick={() => {handleNavigateToStudent(value.ci)}}>{value.nombreCompleto}</span>,
+      toMap: (value: string) => <span onClick={() => { handleNavigateToStudent(value.ci) }}>{value.nombreCompleto}</span>,
     },
     {
       header: 'Correo electrónico',
@@ -61,6 +63,12 @@ const ClassesDetails = () => {
     alumnos: [],
   });
 
+  const isActive =isTurnActive(
+    classResponse.turno.horaInicio,
+    classResponse.turno.horaFin,
+    classResponse.turno.diaParaDictar
+  );
+
   const handleGetClasses = async () => {
     const classRes = await getClass({ id });
 
@@ -68,6 +76,8 @@ const ClassesDetails = () => {
   }
 
   const handleOpenModal = () => {
+    if (isActive) return;
+
     openModal(<AddClassModal
       data={{
         id: classResponse.id,
@@ -75,12 +85,13 @@ const ClassesDetails = () => {
         activityId: classResponse.actividad.id,
         date: classResponse.turno.diaParaDictar,
         turnId: classResponse.turno.id,
-        students: classResponse.alumnos.map((student) => ({
+        students: classResponse?.alumnos?.map((student) => ({
           nombreCompleto: student.nombreCompleto,
           ci: student.ci,
           equipementId: student?.equipamiento?.id,
-        })),
+        })) || [],
       }}
+      setClass={setClassResponse}
     />);
   }
 
@@ -102,10 +113,11 @@ const ClassesDetails = () => {
           <span className='classes__title'>Alumnos Inscriptos:</span>
         </div>
         <Button
-          className="classes__details-button"
+          className={`classes__details-button ${isActive ? 'classes__details-button--disabled' : ''}`}
           onClick={handleOpenModal}
-          icon={<img className='classes__edit' src={editIcon} />}
-          label='Editar'
+          icon={!isActive && <img className='classes__edit' src={editIcon} />}
+          disabled={isActive}
+          label={isActive ? 'La clase se esta dictando, no se puede editar' : 'Editar'}
         />
       </div>
       <Table

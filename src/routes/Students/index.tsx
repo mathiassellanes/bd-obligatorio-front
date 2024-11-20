@@ -87,48 +87,8 @@ const Alumns = () => {
 
   return (
     <div className="classes">
-      <span className='classes__breadcrumb'>Estudiantes</span>
       <div className='classes__actions'>
-        <div className='classes__actions-filters'>
-
-          <Input
-            placeholder='Buscar por estudiante'
-            icon={searchIcon}
-            value={search}
-            onChange={setSearch}
-            iconPosition='right'
-          />
-          <Select
-            value={filters.activity}
-            onChange={(value) => setFilters({ ...filters, activity: value })}
-            options={[
-              { value: 'yoga', label: 'Yoga' },
-              { value: 'crossfit', label: 'Crossfit' },
-              { value: 'pilates', label: 'Pilates' },
-            ]}
-          />
-          <Select
-            value={filters.turn}
-            onChange={(value) => setFilters({ ...filters, turn: value })}
-            options={[
-              { value: 'morning', label: 'Mañana' },
-              { value: 'afternoon', label: 'Tarde' },
-              { value: 'night', label: 'Noche' },
-            ]}
-          />
-
-          <div className='classes__filters--checkbox'>
-            <input
-              type='checkbox'
-              id='dicted'
-              checked={filters.dicted}
-              onChange={() => setFilters({ ...filters, dicted: !filters.dicted })}
-            />
-            <label htmlFor='dicted'>Dictadas</label>
-          </div>
-        </div>
-
-
+        <span className='classes__breadcrumb'>Estudiantes</span>
         <Button
           className="classes__details-button"
           onClick={handleOpenModal}

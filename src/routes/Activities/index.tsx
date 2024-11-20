@@ -69,43 +69,6 @@ const Activities = () => {
   return (
     <div className="activities">
       <span className="activities__breadcrumb">Actividades</span>
-      <div className="activities__filters">
-        <Input
-          placeholder="Buscar por actividad"
-          icon={searchIcon}
-          value={search}
-          onChange={setSearch}
-          iconPosition="right"
-        />
-        <Select
-          value={filters.activity}
-          onChange={(value) => setFilters({ ...filters, activity: value })}
-          options={[
-            { value: 'yoga', label: 'Yoga' },
-            { value: 'crossfit', label: 'Crossfit' },
-            { value: 'pilates', label: 'Pilates' },
-          ]}
-        />
-        <Select
-          value={filters.turn}
-          onChange={(value) => setFilters({ ...filters, turn: value })}
-          options={[
-            { value: 'morning', label: 'Mañana' },
-            { value: 'afternoon', label: 'Tarde' },
-            { value: 'night', label: 'Noche' },
-          ]}
-        />
-
-        <div className="activities__filters--checkbox">
-          <input
-            type="checkbox"
-            id="dicted"
-            checked={filters.dicted}
-            onChange={() => setFilters({ ...filters, dicted: !filters.dicted })}
-          />
-          <label htmlFor="dicted">Dictadas</label>
-        </div>
-      </div>
       <Table columns={columns} data={activities} />
     </div>
   );

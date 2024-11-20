@@ -3,17 +3,22 @@ import Button from "../../Button/Button";
 import Input from "../../Input/Input";
 
 import closeIcon from '../../../assets/icons/close.svg';
-import addIcon from '../../../assets/icons/add.svg';
 
 import './styles.scss';
 import { useEffect, useState } from "react";
 import Select from "../../Select";
-import { useActivities, useEquipements, useEquipementsByActivityId, useInstructors, useStudents, useTurns } from "../../../utils/fetch";
+import {
+  useActivities,
+  useEquipementsByActivityId,
+  useInstructors,
+  useStudents,
+  useTurns
+} from "../../../utils/fetch";
 import { createClass, updateClass } from "../../../api/classes";
 import StudentChip from "../../StudentChip";
 import { format, parseISO } from "date-fns";
 
-const AddClassModal = ({ data }: {
+const AddClassModal = ({ data, setClass }: {
   data?: {
     id: string;
     instructorCi: string;
@@ -41,7 +46,7 @@ const AddClassModal = ({ data }: {
   const { turns, isLoading: isLoadingTurns } = useTurns();
   const { instructors, isLoading: isLoadingInstructors } = useInstructors();
   const { students, isLoading: isLoadingStudents } = useStudents();
-  const { equipements, isLoading: isLoadingEquipements, refetch } = useEquipementsByActivityId({ id: form.activityId });
+  const { equipements, refetch } = useEquipementsByActivityId({ id: form.activityId });
 
   useEffect(() => {
     if (!isLoading && !isLoadingInstructors && !isLoadingTurns && !isLoadingStudents) {
@@ -69,18 +74,28 @@ const AddClassModal = ({ data }: {
     const classData = {
       ciInstructor: form.instructorCi,
       idActividad: Number.parseInt(form.activityId),
-      diaParaDictar: format(form.date, 'yyyy-MM-dd'),
+      diaParaDictar: /^\d{4}-\d{2}-\d{2}$/.test(form.date) ? form.date : format(form.date, 'yyyy-MM-dd'),
       idTurno: Number.parseInt(form.turnId),
       alumnos: form.students.map((student) => ({
-        ci: student.ci,
-        idEquipamiento: Number.parseInt(student.equipementId),
+      ci: student.ci,
+      idEquipamiento: Number.parseInt(student.equipementId),
       })),
     };
 
     if (data) {
-      await updateClass({ id: data.id, ...classData });
+      const updatedClass = await updateClass({ id: data.id, ...classData });
+
+      setClass(updatedClass);
     } else {
-      await createClass(classData);
+      const createdClass = await createClass(classData);
+
+      setClass((prevState) => {
+        if (Array.isArray(prevState)) {
+          return [...prevState, createdClass];
+        } else {
+          return [prevState, createdClass];
+        }
+      });
     }
 
     closeModal();
@@ -92,9 +107,7 @@ const AddClassModal = ({ data }: {
     }
   }, [form.activityId]);
 
-  useEffect(() => {
-    console.log('remount');
-  }, []);
+  console.log('form', form);
 
   return (
     <div className="add-class">
@@ -125,7 +138,10 @@ const AddClassModal = ({ data }: {
         />
         <div className="add-class__container-row">
           <Input
-            onChange={(value) => setForm({ ...form, date: value })}
+            onChange={(value) => {
+              console.log(value)
+              setForm({ ...form, date: value })
+            }}
             label="Dia "
             type="date"
             name="modal"

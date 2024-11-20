@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { Navigate, NavLink, Outlet } from "react-router-dom";
 
 import { sidebarOptions } from "../../../constants";
 import ucuImage from '../../../assets/ucu.svg';
@@ -6,6 +6,10 @@ import ucuImage from '../../../assets/ucu.svg';
 import './styles.scss';
 
 const Sidebar = () => {
+  if (localStorage.getItem('token') === null) {
+    return <Navigate to="/login" />;
+  }
+
   return (
     <div className="sidebar">
       <div className="sidebar__container">

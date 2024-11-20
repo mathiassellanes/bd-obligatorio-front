@@ -7,15 +7,15 @@
   background-color: $white;
   border-radius: 10px;
 
-  .table-header,
-  .table-row {
+  &-header,
+  &-row {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     padding: 20px;
   }
 
-  .table-header {
+  &-header {
     color: $light-blue;
 
     &-item {
@@ -23,17 +23,24 @@
     }
   }
 
-  .table-row {
+  &-row {
     background-color: $cyanLowOpacity;
     border-radius: 10px;
     padding: 10px;
   }
 
-  .table-body {
+  &-body {
     display: flex;
     flex-direction: column;
     gap: 10px;
     padding: 10px;
+
+    &--without-data {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+    }
   }
 
   span {
@@ -41,12 +48,10 @@
     flex: 1;
     text-align: left;
   }
-}
 
-
-.table__actions {
-
-  &--width {
-    max-width: 100px;
+  &__actions {
+    &--width {
+      max-width: 100px;
+    }
   }
 }
