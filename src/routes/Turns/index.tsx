@@ -23,9 +23,7 @@ const Turns = () => {
   const navigate = useNavigate();
   const { openModal } = useModal();
 
-  const handleOpenModal = () => {
-    openModal(<AddTurns />);
-  }
+
   const columns = [
     {
       header: 'ID',
@@ -34,7 +32,7 @@ const Turns = () => {
     },
     {
       header: 'Turno',
-      accessor: 'turno',
+      accessor: '',
       toMap: (value: any) => {
         const horaInicio = format(parse(value.horaInicio, 'HH:mm:ss', new Date()), 'HH:mm');
         const horaFin = format(parse(value.horaFin, 'HH:mm:ss', new Date()), 'HH:mm');
@@ -58,18 +56,17 @@ const Turns = () => {
   ];
 
   const [turns, setTurns] = useState([]);
-  const [search, setSearch] = useState('');
-  const [filters, setFilters] = useState({
-    turn: '',
-    dicted: false,
-  });
 
   const handleGetTurns = async () => {
-    const turnsResponse = await getTurns(); // Update this line
+    const turnsResponse = await getTurns(); 
 
     setTurns(turnsResponse);
   };
 
+  const handleOpenModal = () => {
+    openModal(<AddTurns setTurn={setTurns} />);
+  }
+  
   useEffect(() => {
     handleGetTurns();
   }, []);

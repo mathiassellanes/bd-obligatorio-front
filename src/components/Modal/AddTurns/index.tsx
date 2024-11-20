@@ -9,8 +9,9 @@ import closeIcon from '../../../assets/icons/close.svg';
 
 import './styles.scss';
 import { createTurn, updateTurn } from "../../../api/turns";
+import { set } from "date-fns";
 
-const AddTurns = (data: {
+const AddTurns = ({ data, setTurn }: {
   data?: {
     id: string;
     horaInicio: string;
@@ -36,9 +37,25 @@ const AddTurns = (data: {
   }, [data]);
 
   const handleTurn = async () => {
+    const turnData = {
+      horaInicio: form.horaInicio,
+      horaFin: form.horaFin,
+    };
+
     if (data) {
-      await updateTurn(form);
+      const updatedTurn = await updateTurn({ id: data.id, ...turnData });
+      setTurn(updatedTurn);
     } else {
+      const createdTurn = await createTurn(turnData);
+      
+      console.log('updatedTurn: ', createdTurn);
+      setTurn((prevState) => {
+        if (Array.isArray(prevState)) {
+          return [...prevState, createdTurn];
+        } else {
+          return [prevState, createdTurn];
+        }
+      })
       await createTurn(form);
     }
 
