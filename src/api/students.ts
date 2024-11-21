@@ -47,3 +47,9 @@ export const deleteStudent = async (ci: string) => {
 
   return response.data;
 }
+
+export const getStudentsByActivityAvailable = async (id: string) => {
+  const response = await api.get(`/student/activity-available/${id}`);
+
+  return response.data;
+}

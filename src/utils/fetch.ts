@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getActivities, getActivityById } from "../api/activities";
 import { getInstructorByCi, getInstructors } from "../api/instructors";
 import { getTurns, getTurnsById } from "../api/turns";
-import { getStudentById, getStudents } from "../api/students";
+import { getStudentById, getStudents, getStudentsByActivityAvailable } from "../api/students";
 import { getEquipements, getEquipementsByActiviyId } from "../api/equipements";
 import { getOverview } from "../api/overview";
 import { instructor, instructors } from "../constants/types/instructors";
@@ -174,6 +174,31 @@ export const useStudentByCi = ({ ci }: { ci: string }) => {
   return {
     student,
     setStudent,
+    isLoading,
+  };
+}
+
+export const useStudentsByActivityAvailable = (id: string) => {
+  const [students, setStudents] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleGetStudents = async (activityId: string) => {
+    setIsLoading(true);
+    const studentsResponse = await getStudentsByActivityAvailable(activityId);
+
+    setIsLoading(false);
+    setStudents(studentsResponse);
+  }
+
+  useEffect(() => {
+    if (id) {
+      handleGetStudents(id);
+    }
+  }, []);
+
+  return {
+    refetch: (id: string) => handleGetStudents(id),
+    students,
     isLoading,
   };
 }

@@ -3,7 +3,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Table from '../../components/Table';
 import Button from '../../components/Button/Button';
 import { useModal } from '../../utils/ModalContext';
-import AddStudentModal from '../../components/Modal/AddStudent';
 
 import editIcon from '../../assets/icons/edit.svg';
 import chevronIcon from '../../assets/icons/chevron.svg';
@@ -97,6 +96,7 @@ const ActivitiesDetails = () => {
           <div className="student__details">
             <span className="student__breadcrumb">{activity.descripcion}</span>
             <span className="student__info">Costo: ${activity.costo}</span>
+            <span className="student__info">Edad Minima: {activity.edadMinima}</span>
           </div>
           <Button
             className="student__details-button"

@@ -33,6 +33,11 @@ const Activities = () => {
       toMap: (value: string) => `$${value}`,
     },
     {
+      header: 'Edad mínima',
+      accessor: 'edadMinima',
+      toMap: (value: string) => value,
+    },
+    {
       header: '',
       accessor: 'id',
       className: 'table__actions',

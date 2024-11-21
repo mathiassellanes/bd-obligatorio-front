@@ -21,6 +21,7 @@ export type Activity = {
   id: string;
   descripcion: string;
   costo: number;
+  edadMinima: number;
 };
 
 export type Shift = {

@@ -20,6 +20,7 @@ const EditActivityModal = ({ data, setActivities }: {
   const [form, setForm] = useState({
     descripcion: '',
     costo: '',
+    edadMinima: '',
   });
 
   useEffect(() => {
@@ -27,6 +28,7 @@ const EditActivityModal = ({ data, setActivities }: {
       setForm({
         descripcion: data.descripcion,
         costo: data.costo.toString(),
+        edadMinima: data.edadMinima.toString(),
       });
     }
   }, [data]);
@@ -34,6 +36,7 @@ const EditActivityModal = ({ data, setActivities }: {
   const handleActivity = async () => {
     const activityData = {
       descripcion: form.descripcion,
+      edadMinima: parseInt(form.edadMinima),
       costo: parseFloat(form.costo),
     };
 
@@ -65,6 +68,12 @@ const EditActivityModal = ({ data, setActivities }: {
           label="Costo "
           name="modal"
           value={form.costo}
+        />
+        <Input
+          onChange={(value) => setForm({ ...form, edadMinima: value })}
+          label="Edad mínima"
+          name="modal"
+          value={form.edadMinima}
         />
         <div className="edit-activity__buttons">
           <Button

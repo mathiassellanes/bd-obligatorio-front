@@ -12,6 +12,7 @@ import {
   useEquipementsByActivityId,
   useInstructors,
   useStudents,
+  useStudentsByActivityAvailable,
   useTurns
 } from "../../../utils/fetch";
 import { createClass, updateClass } from "../../../api/classes";
@@ -45,11 +46,11 @@ const AddClassModal = ({ data, setClass }: {
   const { activities, isLoading } = useActivities();
   const { turns, isLoading: isLoadingTurns } = useTurns();
   const { instructors, isLoading: isLoadingInstructors } = useInstructors();
-  const { students, isLoading: isLoadingStudents } = useStudents();
+  const { students, isLoading: isLoadingStudents, refetch: studentsRefetch } = useStudentsByActivityAvailable(form.activityId);
   const { equipements, refetch } = useEquipementsByActivityId({ id: form.activityId });
 
   useEffect(() => {
-    if (!isLoading && !isLoadingInstructors && !isLoadingTurns && !isLoadingStudents) {
+    if (!isLoading && !isLoadingInstructors && !isLoadingTurns) {
       if (data) {
         setForm({
           instructorCi: data.instructorCi,
@@ -68,7 +69,7 @@ const AddClassModal = ({ data, setClass }: {
         });
       }
     }
-  }, [isLoading, isLoadingInstructors, isLoadingTurns, isLoadingStudents, data]);
+  }, [isLoading, isLoadingInstructors, isLoadingTurns, data]);
 
   const handleClass = async () => {
     const classData = {
@@ -104,6 +105,7 @@ const AddClassModal = ({ data, setClass }: {
   useEffect(() => {
     if (form.activityId) {
       refetch(form.activityId);
+      studentsRefetch(form.activityId);
     }
   }, [form.activityId]);
 
