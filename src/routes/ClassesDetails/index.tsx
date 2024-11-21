@@ -137,10 +137,10 @@ const ClassesDetails = () => {
         </div>
         <div className='classes__buttons'>
           <Button
-            className={`classes__details-button--delete`}
+            className={`classes__details-button--delete ${isActive ? 'classes__details-button--disabled' : ''}`}
             onClick={handleDeleteModal}
-            icon={<img className='classes__edit' src={deleteIcon} />}
-            label={'Eliminar'}
+            icon={!isActive && <img className='classes__edit' src={deleteIcon} />}
+            label={isActive ? 'La clase se esta dictando, no se puede eliminar' : 'Eliminar'}
           />
           <Button
             className={`classes__details-button ${isActive ? 'classes__details-button--disabled' : ''}`}
