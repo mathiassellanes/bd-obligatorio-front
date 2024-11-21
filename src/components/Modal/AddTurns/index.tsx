@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import { useModal } from "../../../utils/ModalContext";
 
@@ -7,16 +7,19 @@ import Input from "../../Input/Input";
 
 import closeIcon from '../../../assets/icons/close.svg';
 
-import './styles.scss';
 import { createTurn, updateTurn } from "../../../api/turns";
-import { set } from "date-fns";
+
+import { turn, turns } from "../../../constants/types/turn";
+
+import './styles.scss';
 
 const AddTurns = ({ data, setTurn }: {
   data?: {
     id: string;
     horaInicio: string;
     horaFin: string
-  }
+  },
+  setTurn: Dispatch<SetStateAction<turns | turn>>;
 }) => {
   const { closeModal } = useModal();
 
@@ -44,11 +47,11 @@ const AddTurns = ({ data, setTurn }: {
 
     if (data) {
       const updatedTurn = await updateTurn({ id: data.id, ...turnData });
+
       setTurn(updatedTurn);
     } else {
       const createdTurn = await createTurn(turnData);
-      
-      console.log('updatedTurn: ', createdTurn);
+
       setTurn((prevState) => {
         if (Array.isArray(prevState)) {
           return [...prevState, createdTurn];

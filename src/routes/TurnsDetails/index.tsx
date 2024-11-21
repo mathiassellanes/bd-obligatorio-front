@@ -1,18 +1,21 @@
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { deleteTurn } from '../../api/turns';
+
 import Table from '../../components/Table';
 import Button from '../../components/Button/Button';
 import { useModal } from '../../utils/ModalContext';
-import AddStudentModal from '../../components/Modal/AddStudent';
+import DeleteModal from '../../components/DeleteModals/DeleteClass';
+import AddTurns from '../../components/Modal/AddTurns';
 
 import editIcon from '../../assets/icons/edit.svg';
 import chevronIcon from '../../assets/icons/chevron.svg';
+import deleteIcon from '../../assets/icons/delete.svg';
 
-import './styles.scss';
+import { formatHours } from '../../utils/helpers';
 import { useTurnById } from '../../utils/fetch';
 
-import { formatDate, formatHours } from '../../utils/helpers';
-import AddTurns from '../../components/Modal/AddTurns';
+import './styles.scss';
 
 const TurnsDetails = () => {
   const navigate = useNavigate();
@@ -21,10 +24,10 @@ const TurnsDetails = () => {
     {
       header: 'Instructor',
       accessor: 'instructor',
-      toMap: (value: {
+      toMap: ({ nombre, apellido }: {
         nombre: string;
         apellido: string;
-      }) => `${value.nombre} ${value.apellido}`,
+      }) => nombre && apellido ? `${nombre} ${apellido}` : 'Sin instructor',
     },
     {
       header: 'Actividad',
@@ -62,17 +65,29 @@ const TurnsDetails = () => {
   const { id = '' } = useParams();
   const { openModal } = useModal();
 
-  const { turn, isLoading } = useTurnById({ id });
+  const { turn, isLoading, setTurn } = useTurnById({ id });
 
   const handleOpenModal = () => {
     openModal(
       <AddTurns
-        id={id}
-        horaInicio={turn?.horaInicio}
-        horaFin={turn?.horaFin}
+        data={turn}
+        setTurn={setTurn}
       />
     )
   };
+
+  const handleDeleteModal = () => {
+    openModal(
+      <DeleteModal
+        onDelete={() => {
+          deleteTurn(turn.id)
+
+          navigate('/turns');
+        }}
+        itemName='este turno'
+      />
+    );
+  }
 
   const hours = `${formatHours(turn?.horaInicio)} - ${formatHours(turn?.horaFin)}`;
 
@@ -83,12 +98,20 @@ const TurnsDetails = () => {
           <div className="student__details">
             <span className="student__breadcrumb">{hours}</span>
           </div>
-          <Button
-            className="student__details-button"
-            onClick={handleOpenModal}
-            icon={<img className="student__edit" src={editIcon} />}
-            label="Editar"
-          />
+          <div className="flex-20-gap">
+            <Button
+              className="secondary-button"
+              onClick={handleDeleteModal}
+              icon={<img className="student__delete" src={deleteIcon} />}
+              label="Eliminar"
+            />
+            <Button
+              className="student__details-button"
+              onClick={handleOpenModal}
+              icon={<img className="student__edit" src={editIcon} />}
+              label="Editar"
+            />
+          </div>
         </div>
         <div className="student__title">Clases Inscriptas:</div>
         <Table

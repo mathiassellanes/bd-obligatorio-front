@@ -28,12 +28,15 @@ const Turns = () => {
     {
       header: 'ID',
       accessor: 'id',
-      toMap: (value: any) => value,
+      toMap: (value: string) => value,
     },
     {
       header: 'Turno',
       accessor: '',
-      toMap: (value: any) => {
+      toMap: (value: {
+        horaInicio: string,
+        horaFin: string,
+      }) => {
         const horaInicio = format(parse(value.horaInicio, 'HH:mm:ss', new Date()), 'HH:mm');
         const horaFin = format(parse(value.horaFin, 'HH:mm:ss', new Date()), 'HH:mm');
         return `${horaInicio} - ${horaFin}`;
@@ -44,7 +47,7 @@ const Turns = () => {
       accessor: 'id',
       className: 'table__actions',
       classForWidth: 'table__actions--width',
-      toMap: (value: any) => (
+      toMap: (value: string) => (
         <Button
           className="classes__chevron-button"
           onClick={() => navigate(`${value}`)}
@@ -58,7 +61,7 @@ const Turns = () => {
   const [turns, setTurns] = useState([]);
 
   const handleGetTurns = async () => {
-    const turnsResponse = await getTurns(); 
+    const turnsResponse = await getTurns();
 
     setTurns(turnsResponse);
   };
@@ -66,7 +69,7 @@ const Turns = () => {
   const handleOpenModal = () => {
     openModal(<AddTurns setTurn={setTurns} />);
   }
-  
+
   useEffect(() => {
     handleGetTurns();
   }, []);

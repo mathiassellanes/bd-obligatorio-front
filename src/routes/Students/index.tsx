@@ -16,6 +16,7 @@ import { getStudents } from '../../api/students';
 import './styles.scss'
 import AddStudentModal from '../../components/Modal/AddStudent';
 import { useModal } from '../../utils/ModalContext';
+import { Student } from '../../constants/types/students';
 
 const Alumns = () => {
   const navigate = useNavigate();
@@ -63,13 +64,7 @@ const Alumns = () => {
   ];
 
   const { openModal } = useModal();
-  const [students, setStudents] = useState([]);
-  const [search, setSearch] = useState('');
-  const [filters, setFilters] = useState({
-    activity: '',
-    turn: '',
-    dicted: false,
-  });
+  const [students, setStudents] = useState<Student[]>([]);
 
   const handleGetClasses = async () => {
     const classesResponse = await getStudents();
@@ -82,7 +77,7 @@ const Alumns = () => {
   }, []);
 
   const handleOpenModal = () => {
-    openModal(<AddStudentModal />);
+    openModal(<AddStudentModal setStudents={setStudents}/>);
   }
 
   return (

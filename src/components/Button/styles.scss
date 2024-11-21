@@ -23,3 +23,13 @@
     background: $white;
   }
 }
+
+.secondary-button {
+  background-color: transparent;
+  border: 1px solid $blue;
+  color: $blue;
+
+  & > .icon {
+    background-color: transparent;
+  }
+}

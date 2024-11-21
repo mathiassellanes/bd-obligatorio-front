@@ -11,3 +11,9 @@ export const getActivityById = async ({ id }) => {
 
   return response.data;
 }
+
+export const editActivity = async ({ id, data }) => {
+  const response = await api.put(`/activity/${id}`, data);
+
+  return response.data;
+}

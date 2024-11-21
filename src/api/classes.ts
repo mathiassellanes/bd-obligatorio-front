@@ -50,3 +50,9 @@ export const updateClass = async ({
 
   return response.data;
 }
+
+export const deleteClass = async (id: string) => {
+  const response = await api.delete(`/class/${id}`);
+
+  return response.data;
+}

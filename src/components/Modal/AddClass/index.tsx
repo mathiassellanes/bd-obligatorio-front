@@ -152,7 +152,7 @@ const AddClassModal = ({ data, setClass }: {
             label="Turno "
             name="modal"
             options={turns.map((turn) => ({
-              label: `${turn.turno.horaInicio} - ${turn.turno.horaFin}`,
+              label: `${turn.horaInicio} - ${turn.horaFin}`,
               value: turn.id,
             }))}
             value={form.turnId}

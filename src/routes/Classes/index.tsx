@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { format, parse } from 'date-fns';
+import { parse } from 'date-fns';
 
 import Input from '../../components/Input/Input';
 
@@ -17,6 +17,7 @@ import Button from '../../components/Button/Button';
 import { useNavigate } from 'react-router-dom';
 import { useModal } from '../../utils/ModalContext';
 import AddClassModal from '../../components/Modal/AddClass';
+import { formatDate, formatHours } from '../../utils/helpers';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -26,10 +27,10 @@ const Home = () => {
     {
       header: 'Instructor',
       accessor: 'instructor',
-      toMap: (value: {
+      toMap: ({ nombre, apellido }: {
         nombre: string;
         apellido: string;
-      }) => `${value.nombre} ${value.apellido}`,
+      }) => nombre && apellido ? `${nombre} ${apellido}` : 'Sin instructor',
     },
     {
       header: 'Actividad',
@@ -46,14 +47,18 @@ const Home = () => {
         horaInicio: string;
         horaFin: string;
       }) => {
-        const diaParaDictar = format(new Date(value.diaParaDictar), 'dd/MM/yyyy');
-        const horaInicio = format(parse(value.horaInicio, 'HH:mm:ss', new Date()), 'HH:mm');
-        const horaFin = format(parse(value.horaFin, 'HH:mm:ss', new Date()), 'HH:mm');
+        const diaParaDictar = formatDate(value.diaParaDictar);
+
+        const isTurn = value.horaInicio && value.horaFin;
+
+        const horaInicio = isTurn && formatHours(value.horaInicio);
+        const horaFin = isTurn && formatHours(value.horaFin);
+
 
         return (
           <div className='classes__date'>
             <span>{diaParaDictar}</span>
-            <span>{`${horaInicio} - ${horaFin}`}</span>
+            <span>{isTurn ? `${horaInicio} - ${horaFin}` : 'No hay turno'}</span>
           </div>
         )
       },

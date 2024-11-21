@@ -73,11 +73,26 @@
         background-color: transparent;
         filter: brightness(0) invert(1);
       }
+
+      &--delete {
+        background-color: transparent;
+        border: 1px solid $blue;
+        color: $blue;
+
+        & > .icon {
+          background-color: transparent;
+        }
+      }
     }
 
     &-container {
       display: flex;
       justify-content: space-between;
     }
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 20px;
   }
 }

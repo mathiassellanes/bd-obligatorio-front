@@ -5,20 +5,15 @@ import Input from "../../Input/Input";
 import closeIcon from '../../../assets/icons/close.svg';
 
 import './styles.scss';
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { createStudent, updateStudent } from "../../../api/students";
-import { format, parseISO } from 'date-fns';
-import { formatDate } from "../../../utils/helpers";
 
-const AddStudentModal = ({ data }: {
-  data?: {
-    ci: string,
-    nombreCompleto: string,
-    telefono: string,
-    correo: string,
-    nombre: string,
-    apellido: string,
-  }
+import { formatDate } from "../../../utils/helpers";
+import { Student } from "../../../constants/types/students";
+
+const AddStudentModal = ({ data, setStudents }: {
+  data?: Student;
+  setStudents: Dispatch<SetStateAction<Student[] | Student>>;
 }) => {
   const { closeModal } = useModal();
 
@@ -57,9 +52,19 @@ const AddStudentModal = ({ data }: {
     };
 
     if (data) {
-      await updateStudent(studentData);
+      const updatedStudent = await updateStudent(studentData);
+
+      setStudents(updatedStudent);
     } else {
-      await createStudent(studentData);
+      const createdStudent = await createStudent(studentData);
+
+      setStudents((prevState) => {
+        if (Array.isArray(prevState)) {
+          return [...prevState, createdStudent];
+        } else {
+          return [prevState, createdStudent];
+        }
+      });
     }
 
     closeModal();
@@ -77,6 +82,7 @@ const AddStudentModal = ({ data }: {
           label="CI "
           name="modal"
           value={form.ci}
+          disabled={!!data}
         />
         <Input
           onChange={(value) => setForm({ ...form, nombre: value })}

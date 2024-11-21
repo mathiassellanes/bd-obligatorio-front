@@ -10,6 +10,10 @@ export const formatHours = (horaInicio: string) => {
 export const formatDate = (dia: string, formatType?: string) => format(parseISO(dia || '2021-09-05T00:00:00.000Z'), formatType || 'dd/MM/yyyy');
 
 export const isTurnActive = (horaInicio: string, horaFin: string, diaParaDictar: string): boolean => {
+  if (!horaInicio || !horaFin || !diaParaDictar) {
+    return false;
+  }
+
   const currentDate = new Date();
   const classDate = new Date(diaParaDictar);
   const startTime = parse(horaInicio, 'HH:mm:ss', classDate);

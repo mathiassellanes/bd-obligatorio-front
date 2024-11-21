@@ -6,6 +6,7 @@ import { getStudentById, getStudents } from "../api/students";
 import { getEquipements, getEquipementsByActiviyId } from "../api/equipements";
 import { getOverview } from "../api/overview";
 import { instructor, instructors } from "../constants/types/instructors";
+import { Student } from "../constants/types/students";
 
 export const useActivities = () => {
   const [activities, setActivities] = useState([]);
@@ -141,7 +142,16 @@ export const useEquipementsByActivityId = ({ id }: { id: number }) => {
 }
 
 export const useStudentByCi = ({ ci }: { ci: string }) => {
-  const [student, setStudent] = useState(null);
+  const [student, setStudent] = useState<Student>({
+    ci: '',
+    nombreCompleto: '',
+    telefono: '',
+    correo: '',
+    nombre: '',
+    apellido: '',
+    fechaNacimiento: '',
+    clases: [],
+  });
   const [isLoading, setIsLoading] = useState(false);
 
   const handleGetStudentById = async (studentCi: string) => {
@@ -163,6 +173,7 @@ export const useStudentByCi = ({ ci }: { ci: string }) => {
 
   return {
     student,
+    setStudent,
     isLoading,
   };
 }
@@ -225,6 +236,7 @@ export const useActivityById = ({ id }: { id: number }) => {
   return {
     activity,
     isLoading,
+    setActivity,
   };
 }
 
@@ -251,6 +263,7 @@ export const useTurnById = ({ id }: { id: number }) => {
   return {
     turn,
     isLoading,
+    setTurn,
   };
 }
 

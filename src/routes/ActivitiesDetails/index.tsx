@@ -12,6 +12,7 @@ import './styles.scss';
 import { useActivityById } from '../../utils/fetch';
 
 import { formatDate, formatHours } from '../../utils/helpers';
+import EditActivityModal from '../../components/Modal/EditActivity';
 
 const ActivitiesDetails = () => {
   const navigate = useNavigate();
@@ -20,10 +21,10 @@ const ActivitiesDetails = () => {
     {
       header: 'Instructor',
       accessor: 'instructor',
-      toMap: (value: {
+      toMap: ({ nombre, apellido }: {
         nombre: string;
         apellido: string;
-      }) => `${value.nombre} ${value.apellido}`,
+      }) => nombre && apellido ? `${nombre} ${apellido}` : 'Sin instructor',
     },
     {
       header: 'Turno',
@@ -34,13 +35,17 @@ const ActivitiesDetails = () => {
         horaFin: string;
       }) => {
         const diaParaDictar = formatDate(value.diaParaDictar);
-        const horaInicio = formatHours(value.horaInicio);
-        const horaFin = formatHours(value.horaFin);
+
+        const isTurn = value.horaInicio && value.horaFin;
+
+        const horaInicio = isTurn && formatHours(value.horaInicio);
+        const horaFin = isTurn && formatHours(value.horaFin);
+
 
         return (
           <div className='classes__date'>
             <span>{diaParaDictar}</span>
-            <span>{`${horaInicio} - ${horaFin}`}</span>
+            <span>{isTurn ? `${horaInicio} - ${horaFin}` : 'No hay turno'}</span>
           </div>
         )
       },
@@ -74,15 +79,13 @@ const ActivitiesDetails = () => {
   const { id = '' } = useParams();
   const { openModal } = useModal();
 
-  const { activity, isLoading } = useActivityById({ id });
+  const { activity, isLoading, setActivity } = useActivityById({ id });
 
   const handleOpenModal = () => {
     openModal(
-      <AddStudentModal
-        data={{
-          id: activity.id,
-          descripcion: activity.descripcion,
-        }}
+      <EditActivityModal
+        data={activity}
+        setActivities={setActivity}
       />
     );
   };

@@ -41,3 +41,9 @@ export const updateStudent = async ({ ci, nombre, apellido, telefono, correo, di
 
   return response.data;
 }
+
+export const deleteStudent = async (ci: string) => {
+  const response = await api.delete(`/student/${ci}`);
+
+  return response.data;
+}

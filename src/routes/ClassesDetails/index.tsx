@@ -1,20 +1,20 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { formatHours, formatDate, isTurnActive } from '../../utils/helpers';
+import { useModal } from '../../utils/ModalContext';
 
 import Table from '../../components/Table';
+import Button from '../../components/Button/Button';
+import AddClassModal from '../../components/Modal/AddClass';
+import DeleteModal from '../../components/DeleteModals/DeleteClass';
 
-import { getClass } from '../../api/classes';
+import { deleteClass, getClass } from '../../api/classes';
 
+import deleteIcon from '../../assets/icons/delete.svg';
 import editIcon from '../../assets/icons/edit.svg';
 
-import * as dfns from 'date-fns';
-
 import './styles.scss'
-import { useNavigate, useParams } from 'react-router-dom';
-import Button from '../../components/Button/Button';
-import { useModal } from '../../utils/ModalContext';
-import AddClassModal from '../../components/Modal/AddClass';
 
 const ClassesDetails = () => {
   const navigate = useNavigate();
@@ -63,7 +63,7 @@ const ClassesDetails = () => {
     alumnos: [],
   });
 
-  const isActive =isTurnActive(
+  const isActive = isTurnActive(
     classResponse.turno.horaInicio,
     classResponse.turno.horaFin,
     classResponse.turno.diaParaDictar
@@ -95,9 +95,32 @@ const ClassesDetails = () => {
     />);
   }
 
+  const handleDeleteModal = () => {
+    openModal(<DeleteModal
+      onDelete={() => {
+        deleteClass(classResponse.id)
+
+        navigate('/classes');
+      }}
+      itemName='la clase'
+    />);
+  }
+
   useEffect(() => {
     handleGetClasses();
   }, []);
+
+  const instructorFullName = useMemo(() => {
+    const { instructor } = classResponse;
+
+    return instructor.id ? `${instructor.nombre} ${instructor.apellido}` : 'No hay instructor'
+  }, [classResponse]);
+
+  const turnComplete = useMemo(() => {
+    const { turno } = classResponse;
+
+    return turno.id ? `${formatHours(turno.horaInicio)} - ${formatHours(turno.horaFin)}` : 'No hay turno'
+  }, [classResponse]);
 
   return (
     <div className="classes">
@@ -105,20 +128,28 @@ const ClassesDetails = () => {
         <div className='classes__details'>
           <span className='classes__breadcrumb'>{classResponse.actividad.nombre}</span>
           <span className='classes__turn'>Fecha: {formatDate(classResponse.turno.diaParaDictar)}</span>
-          <span className='classes__turn'>Turno: {`${formatHours(classResponse.turno.horaInicio)} - ${formatHours(classResponse.turno.horaFin)}`}</span>
+          <span className='classes__turn'>Turno: {turnComplete}</span>
           <span className='classes__instructor'>
             Instructor:
-            <span className='classes__instructor-name'>{`${classResponse.instructor.nombre} ${classResponse.instructor.apellido}`}</span>
+            <span className='classes__instructor-name'>{instructorFullName}</span>
           </span>
           <span className='classes__title'>Alumnos Inscriptos:</span>
         </div>
-        <Button
-          className={`classes__details-button ${isActive ? 'classes__details-button--disabled' : ''}`}
-          onClick={handleOpenModal}
-          icon={!isActive && <img className='classes__edit' src={editIcon} />}
-          disabled={isActive}
-          label={isActive ? 'La clase se esta dictando, no se puede editar' : 'Editar'}
-        />
+        <div className='classes__buttons'>
+          <Button
+            className={`classes__details-button--delete`}
+            onClick={handleDeleteModal}
+            icon={<img className='classes__edit' src={deleteIcon} />}
+            label={'Eliminar'}
+          />
+          <Button
+            className={`classes__details-button ${isActive ? 'classes__details-button--disabled' : ''}`}
+            onClick={handleOpenModal}
+            icon={!isActive && <img className='classes__edit' src={editIcon} />}
+            disabled={isActive}
+            label={isActive ? 'La clase se esta dictando, no se puede editar' : 'Editar'}
+          />
+        </div>
       </div>
       <Table
         columns={columns}

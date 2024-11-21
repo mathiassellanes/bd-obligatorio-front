@@ -33,3 +33,9 @@ export const updateInstructor = async ({ ci, nombre, apellido }: Instructor) => 
 
   return response.data;
 }
+
+export const deleteInstructor = async (ci: string) => {
+  const response = await api.delete(`/instructor/${ci}`);
+
+  return response.data;
+}

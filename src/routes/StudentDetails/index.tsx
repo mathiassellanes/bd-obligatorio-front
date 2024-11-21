@@ -2,16 +2,19 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import Table from '../../components/Table';
 import Button from '../../components/Button/Button';
-import { useModal } from '../../utils/ModalContext';
 import AddStudentModal from '../../components/Modal/AddStudent';
+import DeleteModal from '../../components/DeleteModals/DeleteClass';
 
 import editIcon from '../../assets/icons/edit.svg';
+import deleteIcon from '../../assets/icons/delete.svg';
 import chevronIcon from '../../assets/icons/chevron.svg';
 
-import './styles.scss';
-import { useStudentByCi } from '../../utils/fetch';
-
+import { useModal } from '../../utils/ModalContext';
 import { formatDate, formatHours } from '../../utils/helpers';
+import { useStudentByCi } from '../../utils/fetch';
+import { deleteStudent } from '../../api/students';
+
+import './styles.scss';
 
 const StudentDetails = () => {
   const navigate = useNavigate();
@@ -20,10 +23,10 @@ const StudentDetails = () => {
     {
       header: 'Instructor',
       accessor: 'instructor',
-      toMap: (value: {
+      toMap: ({ nombre, apellido }: {
         nombre: string;
         apellido: string;
-      }) => `${value.nombre} ${value.apellido}`,
+      }) => nombre && apellido ? `${nombre} ${apellido}` : 'Sin instructor',
     },
     {
       header: 'Actividad',
@@ -41,13 +44,17 @@ const StudentDetails = () => {
         horaFin: string;
       }) => {
         const diaParaDictar = formatDate(value.diaParaDictar);
-        const horaInicio = formatHours(value.horaInicio);
-        const horaFin = formatHours(value.horaFin);
+
+        const isTurn = value.horaInicio && value.horaFin;
+
+        const horaInicio = isTurn && formatHours(value.horaInicio);
+        const horaFin = isTurn && formatHours(value.horaFin);
+
 
         return (
           <div className='classes__date'>
             <span>{diaParaDictar}</span>
-            <span>{`${horaInicio} - ${horaFin}`}</span>
+            <span>{isTurn ? `${horaInicio} - ${horaFin}` : 'No hay turno'}</span>
           </div>
         )
       },
@@ -76,7 +83,7 @@ const StudentDetails = () => {
   const { ci = '' } = useParams();
   const { openModal } = useModal();
 
-  const { student: studentResponse, isLoading } = useStudentByCi({ ci });
+  const { student: studentResponse, isLoading, setStudent } = useStudentByCi({ ci });
 
   const handleOpenModal = () => {
     openModal(
@@ -89,9 +96,23 @@ const StudentDetails = () => {
           nombre: studentResponse.nombre,
           apellido: studentResponse.apellido,
         }}
+        setStudents={setStudent}
       />
     );
   };
+
+  const handleDeleteModal = () => {
+    openModal(
+      <DeleteModal
+        onDelete={() => {
+          deleteStudent(studentResponse.ci)
+
+          navigate('/students');
+        }}
+        itemName='este estudiante'
+      />
+    );
+  }
 
   return (
     isLoading || !studentResponse ? <div>Cargando...</div> : (
@@ -103,12 +124,20 @@ const StudentDetails = () => {
             <span className="student__info">Teléfono: {studentResponse.telefono}</span>
             <span className="student__info">CI: {studentResponse.ci}</span>
           </div>
-          <Button
-            className="student__details-button"
-            onClick={handleOpenModal}
-            icon={<img className="student__edit" src={editIcon} />}
-            label="Editar"
-          />
+          <div className="flex-20-gap">
+            <Button
+              className="secondary-button"
+              onClick={handleDeleteModal}
+              icon={<img className="student__delete" src={deleteIcon} />}
+              label="Eliminar"
+            />
+            <Button
+              className="student__details-button"
+              onClick={handleOpenModal}
+              icon={<img className="student__edit" src={editIcon} />}
+              label="Editar"
+            />
+          </div>
         </div>
         <div className="student__title">Clases Inscriptas:</div>
         <Table

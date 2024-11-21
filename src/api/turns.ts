@@ -32,3 +32,9 @@ export const updateTurn = async ({ id, horaInicio, horaFin }) => {
 
   return response.data;
 }
+
+export const deleteTurn = async (id) => {
+  const response = await api.delete(`/turn/${id}`);
+
+  return response.data;
+}
