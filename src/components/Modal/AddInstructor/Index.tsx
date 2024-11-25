@@ -71,13 +71,17 @@ const AddInstructorModal = ({ data, setInstructors }: {
         <img src={closeIcon} alt="close" className="add-instructor__header-close" onClick={closeModal} />
       </div>
       <div className="add-instructor__container">
-        <Input
-          onChange={(value) => setForm({ ...form, ci: value })}
-          label="CI "
-          name="modal"
-          value={form.ci}
-          disabled={!!data}
-        />
+        {
+          !data && (
+            <Input
+              onChange={(value) => setForm({ ...form, ci: value })}
+              label="CI "
+              name="modal"
+              value={form.ci}
+              disabled={!!data}
+            />
+          )
+        }
         <Input
           onChange={(value) => setForm({ ...form, nombre: value })}
           label="Nombre "

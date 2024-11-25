@@ -22,5 +22,5 @@ export const sidebarOptions = [
   {
     label: 'Turnos',
     to: '/turns'
-  }
+  },
 ]

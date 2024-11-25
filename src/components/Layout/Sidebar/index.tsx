@@ -32,6 +32,19 @@ const Sidebar = () => {
             ))
           }
         </div>
+        <NavLink
+          onClick={() => {
+            localStorage.removeItem('token');
+          }}
+          to="/login"
+          className={({
+            isActive,
+          }) => (
+            `sidebar__container-titles--option ${isActive ? 'link-active' : ''}`
+          )}
+        >
+          <span>Cerrar Sesión</span>
+        </NavLink>
       </div>
       <div className="sidebar__content">
         <Outlet />

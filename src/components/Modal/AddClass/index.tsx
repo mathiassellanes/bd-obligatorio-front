@@ -46,7 +46,7 @@ const AddClassModal = ({ data, setClass }: {
   const { activities, isLoading } = useActivities();
   const { turns, isLoading: isLoadingTurns } = useTurns();
   const { instructors, isLoading: isLoadingInstructors } = useInstructors();
-  const { students, isLoading: isLoadingStudents, refetch: studentsRefetch } = useStudentsByActivityAvailable(form.activityId);
+  const { students, refetch: studentsRefetch } = useStudentsByActivityAvailable(form.activityId);
   const { equipements, refetch } = useEquipementsByActivityId({ id: form.activityId });
 
   useEffect(() => {
@@ -108,8 +108,6 @@ const AddClassModal = ({ data, setClass }: {
       studentsRefetch(form.activityId);
     }
   }, [form.activityId]);
-
-  console.log('form', form);
 
   return (
     <div className="add-class">
