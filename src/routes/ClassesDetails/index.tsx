@@ -129,6 +129,8 @@ const ClassesDetails = () => {
           <span className='classes__breadcrumb'>{classResponse.actividad.nombre}</span>
           <span className='classes__turn'>Fecha: {formatDate(classResponse.turno.diaParaDictar)}</span>
           <span className='classes__turn'>Turno: {turnComplete}</span>
+          <span className='classes__turn'>Dictada: {classResponse.dictada ? 'Si' : 'No'}</span>
+
           <span className='classes__instructor'>
             Instructor:
             <span className='classes__instructor-name'>{instructorFullName}</span>
